@@ -1,10 +1,11 @@
-from tkinter import *  #importamos la libreria tkinter
+import tkinter as tk  #importamos la libreria tkinter
 from tkinter import messagebox
-import random
-
+import random #importamos la libreria
+from colorama import Fore, Back, Style, init #Importamos colorama, para añadir colores
+init() #Iniciamos colorama
 #-------------------------------configuracion de ventana-------------------------------
 
-root = Tk()                                      #asignamos a "root" como si fuera Tkinter
+root = tk.Tk()                                      #asignamos a "root" como si fuera Tkinter
 root.geometry('500x660')                         #aplicamos a la ventana una medida ('WIDTHxHEIGHT')
 root.configure(bg="black")                       #aplicamos color de fondo de la ventana
 root.title("Buscaminas by Xavi and Gerard")      #cambiamos el nombre de la ventana
@@ -12,13 +13,13 @@ root.resizable(False, False)                     #bloqueamos el reescalado de la
 
 #-------------------------------zonas de la ventana-------------------------------
 
-marco_superior = Frame(root, bg='red', width=500, height=80)  #medidas banner superior
+marco_superior = tk.Frame(root, bg='red', width=500, height=80)  #medidas banner superior
 marco_superior.place(x=0, y=0)  #posición
 
-marco_central = Frame(root, bg='green', width=500, height=500)  #medidas donde se jugará
+marco_central = tk.Frame(root, bg='green', width=500, height=500)  #medidas donde se jugará
 marco_central.place(x=0, y=80)  #posición
 
-marco_inferior = Frame(root, bg='blue', width=500, height=80) #medidas banner inferior
+marco_inferior = tk.Frame(root, bg='blue', width=500, height=80) #medidas banner inferior
 marco_inferior.place(x=0, y=580)  #posicion
 
 #-------------------------------funciones-------------------------------
@@ -26,8 +27,16 @@ marco_inferior.place(x=0, y=580)  #posicion
 class Principal:
     #-------------------------------menú dificultad-------------------------------
     
-    menuDIFICULTAD = {"Fácil": (8, 8, 10), "Medio": (10, 10, 20), "Difícil": (12, 12, 30)}    #asignamos una variable con los valores que tendrá cada dificultad
+    menuDIFICULTAD = {"VS 1 Terroriste": (8, 8, 10), "VS Grupo Terrorista": (10, 10, 20), "VS Terroristas Internacionales": (12, 12, 30)}    #asignamos una variable con los valores que tendrá cada dificultad
                                                                                               #{"Dificultad": (celdas, columnas, minas) , ...}
+    
+    def colores(texto, color):
+        if color == 'amarillo':
+            return f"{Fore.YELLOW}{texto}{Style.RESET_ALL}"
+        elif color == 'naranja':
+            return f"{Fore.GREEN}{texto}{Style.RESET_ALL}"    #Funcion para cambiar los colores
+        elif color == 'rojo':                                  #FALTA LLAMAR ESTA FUNCION, NOSE DONDE SE LLAMA
+            return f"{Fore.BLUE}{texto}{Style.RESET_ALL}"
     
     def __init__(self, master):                #definimos "__init__", el cual se llamara cada vez que creemos objetos nuevos en la clase Principal
         self.master = master                   #guardamos variable master cuando se inicie la clase Principal
@@ -41,8 +50,25 @@ class Principal:
 
         difficulty_menu = tk.Menu(menu, tearoff=0)
         menu.add_cascade(label="Dificultad", menu=difficulty_menu)
+        
+        def cambio_color(texto):
+            return f"{Fore.RED}{texto}{Style.RESET_ALL}"
+            
         for difficulty in Principal.menuDIFICULTAD:
-            difficulty_menu.add_command(label=difficulty, command=lambda d=difficulty: self.start_game(*Principal.menuDIFICULTAD[d]))
+            difficulty_menu.add_command(label=difficulty, command=lambda d=difficulty: self.empieza_juego(*Principal.menuDIFICULTAD[d]))
+
+
+
+    def empieza_juego (self, filas, colum, minas):
+        self.filas = filas
+        self.colum = colum
+        self.minas = minas
+        self.minas_coor = []
+        self.revel = set()
+        self.marca = set()
+        self.campo = set()
+
+principal = Principal(root) #Creamos punto de guardado y llamamos
 
 #-------------------------------iniciar juego-------------------------------
 root.mainloop()    
