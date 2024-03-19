@@ -1,8 +1,6 @@
 import tkinter as tk  #importamos la libreria tkinter
 from tkinter import messagebox
 import random #importamos la libreria
-from colorama import Fore, Back, Style, init #Importamos colorama, para añadir colores
-init() #Iniciamos colorama
 #-------------------------------configuracion de ventana-------------------------------
 
 root = tk.Tk()                                      #asignamos a "root" como si fuera Tkinter
@@ -27,16 +25,9 @@ marco_inferior.place(x=0, y=580)  #posicion
 class Principal:
     #-------------------------------menú dificultad-------------------------------
     
-    menuDIFICULTAD = {"VS 1 Terroriste": (8, 8, 10), "VS Grupo Terrorista": (10, 10, 20), "VS Terroristas Internacionales": (12, 12, 30)}    #asignamos una variable con los valores que tendrá cada dificultad
+    menuDIFICULTAD = {"VS 1 Terrorista": (8, 8, 10), "VS Grupo Terrorista": (10, 10, 20), "VS Terroristas Internacionales": (12, 12, 30)}    #asignamos una variable con los valores que tendrá cada dificultad
                                                                                               #{"Dificultad": (celdas, columnas, minas) , ...}
     
-    def colores(texto, color):
-        if color == 'amarillo':
-            return f"{Fore.YELLOW}{texto}{Style.RESET_ALL}"
-        elif color == 'naranja':
-            return f"{Fore.GREEN}{texto}{Style.RESET_ALL}"    #Funcion para cambiar los colores
-        elif color == 'rojo':                                  #FALTA LLAMAR ESTA FUNCION, NOSE DONDE SE LLAMA
-            return f"{Fore.BLUE}{texto}{Style.RESET_ALL}"
     
     def __init__(self, master):                #definimos "__init__", el cual se llamara cada vez que creemos objetos nuevos en la clase Principal
         self.master = master                   #guardamos variable master cuando se inicie la clase Principal
@@ -50,9 +41,6 @@ class Principal:
 
         difficulty_menu = tk.Menu(menu, tearoff=0)
         menu.add_cascade(label="Dificultad", menu=difficulty_menu)
-        
-        def cambio_color(texto):
-            return f"{Fore.RED}{texto}{Style.RESET_ALL}"
             
         for difficulty in Principal.menuDIFICULTAD:
             difficulty_menu.add_command(label=difficulty, command=lambda d=difficulty: self.empieza_juego(*Principal.menuDIFICULTAD[d]))
