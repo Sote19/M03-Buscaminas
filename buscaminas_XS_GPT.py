@@ -12,7 +12,7 @@ class Principal:
         self.marco_superior = tk.Frame(self.master, bg='red', width=500, height=80)
         self.marco_superior.pack()
         self.marco_central = tk.Frame(self.master, bg='green')
-        self.marco_central.pack(expand=True, fill=tk.BOTH) # Expande el marco central para llenar el espacio disponible
+        self.marco_central.pack(expand=True, fill=tk.BOTH) 
         self.marco_inferior = tk.Frame(self.master, bg='blue', width=500, height=80)
         self.marco_inferior.pack()
         self.create_menu()
@@ -47,6 +47,8 @@ class Principal:
         self.añadir_mina()
         self.añadir_nums()
 
+        self.casillas_restantes = self.filas * self.colum - self.minas
+
         for y in range(self.filas):
             fila = []
             for j in range(self.colum):
@@ -70,10 +72,46 @@ class Principal:
                         self.tabla[f][c] += 1       
 
     def on_click(self, fila, col):
-        pass
+        if (fila, col) in self.marca:
+            return
+        
+        if (fila, col) in self.revel:
+            return
+        
+        if self.tabla[fila][col] == -1:
+            messagebox.showinfo("Game Over", "¡Has perdido!")
+            self.mostrar_minas()
+        else:
+            self.revelar_casilla(fila, col)
+
+    def revelar_casilla(self, fila, col):
+        if (fila, col) in self.revel:
+            return
+
+        self.botones[fila][col].config(text=str(self.tabla[fila][col]), state='disabled')
+        self.revel.add((fila, col))
+
+        self.casillas_restantes -= 1
+        if self.casillas_restantes == 0:
+            messagebox.showinfo("¡Felicidades!", "¡Has ganado!")
+
+        if self.tabla[fila][col] == 0:
+            for f in range(fila - 1, fila + 2):
+                for c in range(col - 1, col + 2):
+                    if 0 <= f < self.filas and 0 <= c < self.colum and (f, c) not in self.revel:
+                        self.revelar_casilla(f, c)
 
     def banderin(self, fila, col):
-        pass
+        if (fila, col) in self.marca:
+            self.botones[fila][col].config(text="")
+            self.marca.remove((fila, col))
+        else:
+            self.botones[fila][col].config(text="🚩")
+            self.marca.add((fila, col))
+
+    def mostrar_minas(self):
+        for fila, col in self.minas_coor:
+            self.botones[fila][col].config(text="💣", state='disabled')
 
 root = tk.Tk()
 root.geometry('583x720')
