@@ -4,7 +4,7 @@ import random
 
 class Principal:
     
-    menuDIFICULTAD = {"VS 1 Terrorista": (8, 8, 10), "VS Grupo Terrorista": (10, 10, 20), "VS Terroristas Internacionales": (12, 12, 30)}
+    menuDIFICULTAD = {"VS 1 Terrorista": (8, 8, 10, 9), "VS Grupo Terrorista": (10, 10, 20, 7)}
     
     def __init__(self, master):
         self.master = master
@@ -27,10 +27,11 @@ class Principal:
         for difficulty in Principal.menuDIFICULTAD:
             difficulty_menu.add_command(label=difficulty, command=lambda d=difficulty: self.empieza_juego(*Principal.menuDIFICULTAD[d]))
 
-    def empieza_juego(self, filas, colum, minas):
+    def empieza_juego(self, filas, colum, minas, tamaño_casilla):
         self.filas = filas
         self.colum = colum
         self.minas = minas
+        self.tamaño_casilla = tamaño_casilla
         self.minas_coor = []
         self.revel = set()
         self.marca = set()
@@ -45,14 +46,15 @@ class Principal:
         self.tabla = [[0] * self.colum for x in range(self.filas)]
         self.añadir_mina()
         self.añadir_nums()
-        
+
         for y in range(self.filas):
             fila = []
             for j in range(self.colum):
-                boton = tk.Button(self.marco_central, width=4, height=2, command=lambda fila=y, col=j: self.on_click(fila, col))
+                boton = tk.Button(self.marco_central, width=self.tamaño_casilla, height=self.tamaño_casilla // 2, command=lambda fila=y, col=j: self.on_click(fila, col))
                 boton.bind("<Button-3>", lambda event, row=y, column=j: self.banderin(row, column))
                 boton.grid(row=y, column=j)
                 fila.append(boton)
+            
             self.botones.append(fila)
 
     def añadir_mina(self):
@@ -74,7 +76,7 @@ class Principal:
         pass
 
 root = tk.Tk()
-root.geometry('500x660')
+root.geometry('583x720')
 root.configure(bg="black")
 root.title("Buscaminas by Xavi and Gerard")
 root.resizable(False, False)
