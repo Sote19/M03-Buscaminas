@@ -10,11 +10,11 @@ class Principal:
         self.master = master
         self.botones = []
         self.marco_superior = tk.Frame(self.master, bg='red', width=500, height=80)
-        self.marco_superior.pack()
+        self.marco_superior.pack(fill='x')
         self.marco_central = tk.Frame(self.master, bg='green')
         self.marco_central.pack(expand=True, fill=tk.BOTH) 
         self.marco_inferior = tk.Frame(self.master, bg='blue', width=500, height=80)
-        self.marco_inferior.pack()
+        self.marco_inferior.pack(fill='x')
         self.create_menu()
 
     def create_menu(self):
